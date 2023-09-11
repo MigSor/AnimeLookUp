@@ -152,3 +152,24 @@ form.hidden {
   -webkit-text-stroke-width: 8px;
   -webkit-text-stroke-color: rgb(171, 171, 171);
 }
+
+.anime-info-div {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  background-color: rgb(23, 22, 22);
+}
+.anime-info-img {
+  flex: 40%;
+}
+.anime-info {
+  flex: 60%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.anime-info-img img {
+  width: 100%;
+  height: 60%;
+  border-radius: 8px;
+}

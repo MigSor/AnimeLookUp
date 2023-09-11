@@ -70,6 +70,79 @@ function getClickedAnimeDetails(card, topAnime) {
     return anime.title === card.lastElementChild.innerText;
   });
   console.log(animeInfo);
+  renderAnimeInfo(animeInfo);
 }
+
+function renderAnimeInfo(animeInfo) {
+  // clear the section
+  animeDetails.innerHTML = "";
+  const mainDiv = document.createElement("div");
+  const imgDiv = document.createElement("div");
+  const infoDiv = document.createElement("div");
+  const img = document.createElement("img");
+  const synopsisH3 = document.createElement("h3");
+  const synopsisParagraph = document.createElement("p");
+  const episodesH3 = document.createElement("h3");
+  const episodesParagraph = document.createElement("p");
+  const ratingH3 = document.createElement("h3");
+  const ratingParagraph = document.createElement("p");
+  const statusH3 = document.createElement("h3");
+  const statusParagraph = document.createElement("p");
+  const genresH3 = document.createElement("h3");
+  const genresParagraph = document.createElement("p");
+  const video = document.createElement("iframe");
+  mainDiv.classList.add("anime-info-div");
+  imgDiv.classList.add("anime-info-img");
+  infoDiv.classList.add("anime-info");
+
+  img.src = animeInfo[0].images.jpg.image_url;
+  img.alt = animeInfo.title;
+
+  synopsisH3.innerText = "SYNOPSIS : ";
+  infoDiv.append(synopsisH3);
+  synopsisParagraph.innerText = animeInfo[0].synopsis;
+  infoDiv.append(synopsisParagraph);
+
+  episodesH3.innerText = "EPISODES : ";
+  infoDiv.append(episodesH3);
+  episodesParagraph.innerText = animeInfo[0].episodes;
+  infoDiv.append(episodesParagraph);
+
+  ratingH3.innerText = "RATING : ";
+  infoDiv.append(ratingH3);
+  ratingParagraph.innerText = animeInfo[0].rating;
+  infoDiv.append(ratingParagraph);
+
+  statusH3.innerText = "STATUS : ";
+  infoDiv.append(statusH3);
+  statusParagraph.innerText = animeInfo[0].status;
+  infoDiv.append(statusParagraph);
+
+  if (animeInfo[0].trailer.embed_url) {
+    video.src = animeInfo[0].trailer.embed_url;
+    video.width = "100%";
+    video.height = "320";
+    imgDiv.append(img, video);
+  } else {
+    img.style.height = "100%";
+    imgDiv.append(img);
+  }
+
+  genresH3.innerText = "GENRES : ";
+  infoDiv.append(genresH3);
+  animeInfo[0].genres.forEach((element) => {
+    const span = document.createElement("span");
+    span.innerText = element.name + ", ";
+    genresParagraph.append(span);
+  });
+  infoDiv.append(genresParagraph);
+  //   add to the div
+
+  mainDiv.append(imgDiv, infoDiv);
+  //   add to the webpage
+  animeDetails.append(mainDiv);
+}
+
+function addAnimeInfo(heading, info) {}
 
 topAnimeContent.addEventListener("load", fetchTopAnime());
