@@ -2,14 +2,14 @@ const animeSearchInput = document.querySelector("#anime-form-input");
 const animeForm = document.querySelector("#anime-form");
 const topAnimeContent = document.querySelector(".top-anime-content");
 const animeSearchContent = document.querySelector(".anime-search-list");
+const animeDetails = document.querySelector(".anime-details");
 
 animeForm.addEventListener("submit", searchAnime);
 
 async function fetchAnime(url) {
-  console.log("fetch this", url);
   const response = await fetch(url);
   const { data } = await response.json();
-  console.log("array of objects returned", data);
+
   return data;
 }
 
@@ -34,8 +34,15 @@ async function fetchTopAnime() {
   const baseUrl = "https://api.jikan.moe/v4/top/anime";
   const animeData = await fetchAnime(baseUrl);
   const results = renderAnimeCard(animeData);
+  const topAnime = animeData.slice(0, 9);
+  console.log(topAnime);
   results.slice(0, 9).map((card, index) => {
     let div = document.createElement("div");
+    div.addEventListener("click", function () {
+      topAnime.filter(
+        (anime) => anime.title === card.lastElementChild.innerText
+      );
+    });
     div.classList.add("card-ranks");
     let p = document.createElement("p");
     p.textContent = index + 1;
