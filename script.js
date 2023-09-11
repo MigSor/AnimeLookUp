@@ -3,6 +3,7 @@ const animeForm = document.querySelector("#anime-form");
 const topAnimeContent = document.querySelector(".top-anime-content");
 const animeSearchContent = document.querySelector(".anime-search-list");
 const animeDetails = document.querySelector(".anime-details");
+let animeInfo;
 
 animeForm.addEventListener("submit", searchAnime);
 
@@ -35,14 +36,11 @@ async function fetchTopAnime() {
   const animeData = await fetchAnime(baseUrl);
   const results = renderAnimeCard(animeData);
   const topAnime = animeData.slice(0, 9);
+
   console.log(topAnime);
   results.slice(0, 9).map((card, index) => {
     let div = document.createElement("div");
-    div.addEventListener("click", function () {
-      topAnime.filter(
-        (anime) => anime.title === card.lastElementChild.innerText
-      );
-    });
+    div.addEventListener("click", () => getClickedAnimeDetails(card, topAnime));
     div.classList.add("card-ranks");
     let p = document.createElement("p");
     p.textContent = index + 1;
@@ -65,6 +63,13 @@ function renderAnimeCard(animeArray) {
     return div;
   });
   return animeCardArray;
+}
+
+function getClickedAnimeDetails(card, topAnime) {
+  animeInfo = topAnime.filter((anime) => {
+    return anime.title === card.lastElementChild.innerText;
+  });
+  console.log(animeInfo);
 }
 
 topAnimeContent.addEventListener("load", fetchTopAnime());
