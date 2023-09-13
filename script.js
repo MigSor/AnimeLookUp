@@ -19,6 +19,7 @@ async function searchAnime(event) {
   const baseUrl = `https://api.jikan.moe/v4/anime`;
   const url = `${baseUrl}?q=${animeSearchInput.value}`;
   const animeData = await fetchAnime(url);
+  console.log("this is the anime data from search", animeData);
   animeSearchInput.value = "";
   animeSearchInput.focus();
   if (animeSearchContent.hasChildNodes()) {
@@ -26,9 +27,16 @@ async function searchAnime(event) {
   }
 
   const animeCards = renderAnimeCard(animeData);
-  animeCards.map((card) => {
-    return animeSearchContent.append(card);
-  });
+
+  if (animeData) {
+    animeCards.forEach((card) => {
+      card.addEventListener("click", (e) => {
+        console.log(e.target);
+        getClickedAnimeDetails(card, animeData);
+      });
+      animeSearchContent.append(card);
+    });
+  }
 }
 
 async function fetchTopAnime() {
@@ -37,7 +45,6 @@ async function fetchTopAnime() {
   const results = renderAnimeCard(animeData);
   const topAnime = animeData.slice(0, 9);
 
-  console.log(topAnime);
   results.slice(0, 9).map((card, index) => {
     let div = document.createElement("div");
     div.addEventListener("click", () => getClickedAnimeDetails(card, topAnime));
@@ -69,7 +76,6 @@ function getClickedAnimeDetails(card, topAnime) {
   animeInfo = topAnime.filter((anime) => {
     return anime.title === card.lastElementChild.innerText;
   });
-  console.log(animeInfo);
   renderAnimeInfo(animeInfo);
 }
 
