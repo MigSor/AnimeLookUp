@@ -151,4 +151,13 @@ function renderAnimeInfo(animeInfo) {
 
 function addAnimeInfo(heading, info) {}
 
-topAnimeContent.addEventListener("load", fetchTopAnime());
+window.addEventListener("load", async () => {
+  let loadingImg = document.createElement("img");
+  loadingImg.src = "./assets/images/loading.gif";
+  loadingImg.alt = "loading top anime";
+  loadingImg.style.margin = "0 auto";
+  topAnimeContent.append(loadingImg);
+  // Wait for the Promise to finish before continuing
+  await Promise.all([fetchTopAnime()]);
+  loadingImg.style.display = "none";
+});
