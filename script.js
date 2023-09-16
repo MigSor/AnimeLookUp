@@ -18,6 +18,9 @@ async function fetchAnime(url) {
 
 async function searchAnime(event) {
   event.preventDefault();
+
+  //reset style to grid
+  animeSearchContent.style.display = "grid";
   const baseUrl = `https://api.jikan.moe/v4/anime`;
   let url = `${baseUrl}?q=${animeSearchInput.value}`;
   isAnimeSearchSFW();
@@ -53,6 +56,15 @@ async function searchAnime(event) {
       animeSearchContent.append(card);
     });
   }
+  if (!animeSearchContent.hasChildNodes()) {
+    let h2 = document.createElement("h2");
+    animeSearchContent.style.display = "flex";
+    h2.innerText = "Sorry, your search have no results...";
+    animeSearchContent.append(h2);
+  }
+  animeSearchContent.scrollIntoView({
+    behavior: "smooth",
+  });
 }
 
 async function fetchTopAnime() {
