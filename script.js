@@ -18,22 +18,9 @@ async function fetchAnime(url) {
 
 async function searchAnime(event) {
   event.preventDefault();
-  selectAnimeSFW.addEventListener("change", () => {
-    if (selectAnimeSFW.value) {
-      console.log(selectAnimeSFW.value);
-      isSearchSFW = true;
-    } else {
-      console.log(selectAnimeSFW.value);
-      isSearchSFW = false;
-    }
-  });
-  console.log("this is return from, ", isSearchSFW);
-
   const baseUrl = `https://api.jikan.moe/v4/anime`;
   let url = `${baseUrl}?q=${animeSearchInput.value}`;
-  // if (isSearchSFW === undefined) {
-  //   url = `${baseUrl}?q=${animeSearchInput.value}`;
-  // }
+  isAnimeSearchSFW();
   if (isSearchSFW) {
     url = `${baseUrl}?q=${animeSearchInput.value}&sfw`;
   }
@@ -43,6 +30,16 @@ async function searchAnime(event) {
   animeSearchInput.focus();
   if (animeSearchContent.hasChildNodes()) {
     animeSearchContent.innerHTML = "";
+  }
+
+  function isAnimeSearchSFW() {
+    selectAnimeSFW.addEventListener("change", () => {
+      if (selectAnimeSFW.value) {
+        isSearchSFW = true;
+      } else {
+        isSearchSFW = false;
+      }
+    });
   }
 
   const animeCards = renderAnimeCard(animeData);
