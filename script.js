@@ -60,7 +60,7 @@ async function fetchTopAnime() {
   const animeData = await fetchAnime(baseUrl);
   const results = renderAnimeCard(animeData);
   const topAnime = animeData.slice(0, 9);
-
+  console.log("anime data", topAnime);
   results.slice(0, 9).map((card, index) => {
     let div = document.createElement("div");
     div.addEventListener("click", () => getClickedAnimeDetails(card, topAnime));
@@ -100,49 +100,33 @@ function getClickedAnimeDetails(card, topAnime) {
 }
 
 function renderAnimeInfo(animeInfo) {
-  // clear the section
   animeDetails.innerHTML = "";
   const mainDiv = document.createElement("div");
   const imgDiv = document.createElement("div");
-  const infoDiv = document.createElement("div");
   const img = document.createElement("img");
-  const synopsisH3 = document.createElement("h3");
-  const synopsisParagraph = document.createElement("p");
-  const episodesH3 = document.createElement("h3");
-  const episodesParagraph = document.createElement("p");
-  const ratingH3 = document.createElement("h3");
-  const ratingParagraph = document.createElement("p");
-  const statusH3 = document.createElement("h3");
-  const statusParagraph = document.createElement("p");
-  const genresH3 = document.createElement("h3");
-  const genresParagraph = document.createElement("p");
   const video = document.createElement("iframe");
   mainDiv.classList.add("anime-info-div");
   imgDiv.classList.add("anime-info-img");
-  infoDiv.classList.add("anime-info");
 
   img.src = animeInfo[0].images.jpg.image_url;
   img.alt = animeInfo.title;
-
-  synopsisH3.innerText = "SYNOPSIS : ";
-  infoDiv.append(synopsisH3);
-  synopsisParagraph.innerText = animeInfo[0].synopsis;
-  infoDiv.append(synopsisParagraph);
-
-  episodesH3.innerText = "EPISODES : ";
-  infoDiv.append(episodesH3);
-  episodesParagraph.innerText = animeInfo[0].episodes;
-  infoDiv.append(episodesParagraph);
-
-  ratingH3.innerText = "RATING : ";
-  infoDiv.append(ratingH3);
-  ratingParagraph.innerText = animeInfo[0].rating;
-  infoDiv.append(ratingParagraph);
-
-  statusH3.innerText = "STATUS : ";
-  infoDiv.append(statusH3);
-  statusParagraph.innerText = animeInfo[0].status;
-  infoDiv.append(statusParagraph);
+  const mainInfoDiv = document.createElement("div");
+  mainInfoDiv.classList.add("main-info-div");
+  const animeSynopsis = addAnimeInfo("SYNOPSIS :", animeInfo[0].synopsis);
+  const animeEpisodes = addAnimeInfo("EPISODES :", animeInfo[0].episodes);
+  const animeRating = addAnimeInfo("RATING : ", animeInfo[0].rating);
+  const animeStatus = addAnimeInfo("STATUS :", animeInfo[0].status);
+  let genres = animeInfo[0].genres.map((element) => {
+    return element.name;
+  });
+  const animeGenres = addAnimeInfo("GENRES : ", genres);
+  mainInfoDiv.append(
+    animeSynopsis,
+    animeEpisodes,
+    animeRating,
+    animeStatus,
+    animeGenres
+  );
 
   if (animeInfo[0].trailer.embed_url) {
     video.src = animeInfo[0].trailer.embed_url;
@@ -154,22 +138,22 @@ function renderAnimeInfo(animeInfo) {
     imgDiv.append(img);
   }
 
-  genresH3.innerText = "GENRES : ";
-  infoDiv.append(genresH3);
-  animeInfo[0].genres.forEach((element) => {
-    const span = document.createElement("span");
-    span.innerText = element.name + ", ";
-    genresParagraph.append(span);
-  });
-  infoDiv.append(genresParagraph);
-  //   add to the div
-
-  mainDiv.append(imgDiv, infoDiv);
+  mainDiv.append(imgDiv, mainInfoDiv);
   //   add to the webpage
   animeDetails.append(mainDiv);
 }
 
-function addAnimeInfo(heading, info) {}
+function addAnimeInfo(heading, info) {
+  const animeDetailsHeading = document.createElement("h3");
+  const animeDetailsInfo = document.createElement("p");
+  const infoDiv = document.createElement("div");
+  infoDiv.classList.add("anime-info");
+  animeDetailsHeading.innerText = `${heading}`;
+  infoDiv.append(animeDetailsHeading);
+  animeDetailsInfo.innerText = info;
+  infoDiv.append(animeDetailsInfo);
+  return infoDiv;
+}
 
 window.addEventListener("load", async () => {
   let loadingImg = document.createElement("img");
