@@ -18,14 +18,20 @@
                 MyAnimeList</a
               ></span
             >
-            and allows you to search for any anime that you want to view details
+            and allows you to search for an anime that you want to view details
             on.
           </p>
         </div>
       </div>
       <header id="header">
         <form id="anime-form" class="anime-form hidden">
+          <label for="animeSFW">Search is Safe for Work: </label>
+          <select name="animeSFW" id="animeSFW">
+            <option value="true">True</option>
+            <option value="false" selected>False</option>
+          </select>
           <input type="text" id="anime-form-input" />
+
           <button type="submit" id="anime-form-btn">SEARCH</button>
         </form>
       </header>

@@ -3,6 +3,8 @@ const animeForm = document.querySelector("#anime-form");
 const topAnimeContent = document.querySelector(".top-anime-content");
 const animeSearchContent = document.querySelector(".anime-search-list");
 const animeDetails = document.querySelector(".anime-details");
+const selectAnimeSFW = document.querySelector("#animeSFW");
+let isSearchSFW;
 let animeInfo;
 
 animeForm.addEventListener("submit", searchAnime);
@@ -16,8 +18,25 @@ async function fetchAnime(url) {
 
 async function searchAnime(event) {
   event.preventDefault();
+  selectAnimeSFW.addEventListener("change", () => {
+    if (selectAnimeSFW.value) {
+      console.log(selectAnimeSFW.value);
+      isSearchSFW = true;
+    } else {
+      console.log(selectAnimeSFW.value);
+      isSearchSFW = false;
+    }
+  });
+  console.log("this is return from, ", isSearchSFW);
+
   const baseUrl = `https://api.jikan.moe/v4/anime`;
-  const url = `${baseUrl}?q=${animeSearchInput.value}`;
+  let url = `${baseUrl}?q=${animeSearchInput.value}`;
+  // if (isSearchSFW === undefined) {
+  //   url = `${baseUrl}?q=${animeSearchInput.value}`;
+  // }
+  if (isSearchSFW) {
+    url = `${baseUrl}?q=${animeSearchInput.value}&sfw`;
+  }
   const animeData = await fetchAnime(url);
   console.log("this is the anime data from search", animeData);
   animeSearchInput.value = "";
