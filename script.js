@@ -22,11 +22,14 @@ async function searchAnime(event) {
   //reset style to grid
   animeSearchContent.style.display = "grid";
   const baseUrl = `https://api.jikan.moe/v4/anime`;
-  let url = `${baseUrl}?q=${animeSearchInput.value}`;
-  isAnimeSearchSFW();
-  if (isSearchSFW) {
+  let url;
+  // isAnimeSearchSFW();
+  if (selectAnimeSFW.value === "true") {
     url = `${baseUrl}?q=${animeSearchInput.value}&sfw`;
+  } else if (selectAnimeSFW.value === "false") {
+    url = `${baseUrl}?q=${animeSearchInput.value}`;
   }
+
   const animeData = await fetchAnime(url);
   console.log("this is the anime data from search", animeData);
   animeSearchInput.value = "";
@@ -35,22 +38,11 @@ async function searchAnime(event) {
     animeSearchContent.innerHTML = "";
   }
 
-  function isAnimeSearchSFW() {
-    selectAnimeSFW.addEventListener("change", () => {
-      if (selectAnimeSFW.value) {
-        isSearchSFW = true;
-      } else {
-        isSearchSFW = false;
-      }
-    });
-  }
-
   const animeCards = renderAnimeCard(animeData);
 
   if (animeData) {
     animeCards.forEach((card) => {
       card.addEventListener("click", (e) => {
-        console.log(e.target);
         getClickedAnimeDetails(card, animeData);
       });
       animeSearchContent.append(card);
@@ -72,7 +64,7 @@ async function fetchTopAnime() {
   const animeData = await fetchAnime(baseUrl);
   const results = renderAnimeCard(animeData);
   const topAnime = animeData.slice(0, 9);
-  console.log("anime data", topAnime);
+
   results.slice(0, 9).map((card, index) => {
     let div = document.createElement("div");
     div.addEventListener("click", () => getClickedAnimeDetails(card, topAnime));
