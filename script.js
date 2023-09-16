@@ -75,6 +75,8 @@ async function fetchTopAnime() {
 
 function renderAnimeCard(animeArray) {
   const animeCardArray = animeArray.map((anime) => {
+    let link = document.createElement("a");
+    link.href = "#anime-details";
     let div = document.createElement("div");
     div.classList.add("anime-card");
     let img = document.createElement("img");
@@ -82,8 +84,10 @@ function renderAnimeCard(animeArray) {
     img.src = anime.images.jpg.image_url;
     img.alt = anime.title;
     p.textContent = anime.title;
+
     div.append(img, p);
-    return div;
+    link.append(div);
+    return link;
   });
   return animeCardArray;
 }
