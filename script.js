@@ -209,6 +209,9 @@ function searchByFavoriteList() {
         console.log(data);
         let cards = renderAnimeCard(data);
         cards.forEach((card) => {
+          card.addEventListener("click", (e) => {
+            getClickedAnimeDetails(card, data);
+          });
           animeSearchContent.append(card);
         });
       });
