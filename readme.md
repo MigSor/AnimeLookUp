@@ -22,7 +22,7 @@ AnimeLookUp is a web-based application that allows users to search for informati
 
 - **Jikan API:** The Jikan API, an unofficial MyAnimeList API, was used to fetch extensive anime-related data, including details about episodes, characters, and more.
 
-- **Git and GitHub:** Git was used for version control, and the project's codebase is hosted on GitHub at [AnimeLookUp GitHub Repository](https://github.com/MigSor/AnimeLookUp).
+- **Git and GitHub:** Git was used for version control, and the project's codebase is hosted on GitHub at [AnimeLookUp GitHub Repository](https://github.com/MigSor/AnimeLookUp). Website is hosted with Github Pages [AnimeLookUp Github Pages](https://migsor.github.io/AnimeLookUp/).
 
 ## Getting Started
 
