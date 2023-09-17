@@ -24,7 +24,13 @@
         </div>
       </div>
       <header id="header">
-        <form id="anime-form" class="anime-form hidden">
+        <div>
+          <label for="">Search using your favorite list</label>
+          <select name="favorite" id="favorite">
+            <option value="none" selected>NONE</option>
+          </select>
+        </div>
+        <form id="anime-form" class="anime-form">
           <label for="animeSFW">Search is Safe for Work: </label>
           <select name="animeSFW" id="animeSFW">
             <option value="true">True</option>

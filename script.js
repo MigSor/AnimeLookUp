@@ -4,6 +4,7 @@ const topAnimeContent = document.querySelector(".top-anime-content");
 const animeSearchContent = document.querySelector(".anime-search-list");
 const animeDetails = document.querySelector(".anime-details");
 const selectAnimeSFW = document.querySelector("#animeSFW");
+const favoriteList = document.querySelector("#favorite");
 let isSearchSFW;
 let animeInfo;
 
@@ -103,8 +104,22 @@ function getClickedAnimeDetails(card, topAnime) {
   renderAnimeInfo(animeInfo);
 }
 
-function renderAnimeInfo(animeInfo) {
+async function getStreamingService(animeInfo) {
+  ////////////////
+  console.log("I want to see where this can be wathced", animeInfo[0].mal_id);
+  let streamingURL = `https://api.jikan.moe/v4/anime/${animeInfo[0].mal_id}/streaming`;
+  let response = await fetch(streamingURL);
+  let { data } = await response.json();
+  const streamingServicesName = data.map((element) => element.name);
+  console.log("the streaming services available:", data);
+
+  return streamingServicesName;
+  ////////////////
+}
+
+async function renderAnimeInfo(animeInfo) {
   animeDetails.innerHTML = "";
+  let streamingServices = await getStreamingService(animeInfo);
   const mainDiv = document.createElement("div");
   const imgDiv = document.createElement("div");
   const img = document.createElement("img");
@@ -113,7 +128,7 @@ function renderAnimeInfo(animeInfo) {
   imgDiv.classList.add("anime-info-img");
 
   img.src = animeInfo[0].images.jpg.image_url;
-  img.alt = animeInfo.title;
+  img.alt = animeInfo[0].title;
   const mainInfoDiv = document.createElement("div");
   mainInfoDiv.classList.add("main-info-div");
   const animeSynopsis = addAnimeInfo("SYNOPSIS :", animeInfo[0].synopsis);
@@ -123,13 +138,29 @@ function renderAnimeInfo(animeInfo) {
   let genres = animeInfo[0].genres.map((element) => {
     return element.name;
   });
+
+  const streamingServicesList = addAnimeInfo(
+    "AVAILABLE TO STREAM : ",
+    streamingServices
+  );
+
   const animeGenres = addAnimeInfo("GENRES : ", genres);
+  const favoriteBtn = document.createElement("button");
+  favoriteBtn.classList.add("favorite-button");
+  favoriteBtn.innerText = "ADD TO FAVORITES 🥰";
+  console.log("chosen anime title", animeInfo[0].title);
+  favoriteBtn.addEventListener("click", () =>
+    addToFavoriteList(animeInfo[0].title)
+  );
+
   mainInfoDiv.append(
     animeSynopsis,
     animeEpisodes,
     animeRating,
     animeStatus,
-    animeGenres
+    animeGenres,
+    streamingServicesList,
+    favoriteBtn
   );
 
   if (animeInfo[0].trailer.embed_url) {
@@ -159,6 +190,37 @@ function addAnimeInfo(heading, info) {
   return infoDiv;
 }
 
+function addToFavoriteList(animeName) {
+  const favoriteAnime = document.createElement("option");
+  favoriteAnime.value = animeName;
+  favoriteAnime.innerText = animeName;
+  favoriteList.append(favoriteAnime);
+}
+
+function searchByFavoriteList() {
+  const baseUrl = `https://api.jikan.moe/v4/anime`;
+  favoriteList.addEventListener("change", function (e) {
+    // console.log(e.target.value);
+    url = `${baseUrl}?q=${e.target.value}`;
+    fetch(url)
+      .then((response) => response.json())
+      .then(({ data }) => {
+        console.log(data);
+        let cards = renderAnimeCard(data);
+        cards.forEach((card) => {
+          animeSearchContent.append(card);
+        });
+      });
+  });
+
+  // async function fetchAnime(url) {
+  //   const response = await fetch(url);
+  //   const { data } = await response.json();
+
+  //   return data;
+  // }
+}
+
 window.addEventListener("load", async () => {
   let loadingImg = document.createElement("img");
   loadingImg.src = "./assets/images/loading.gif";
@@ -168,4 +230,5 @@ window.addEventListener("load", async () => {
   // Wait for the Promise to finish before continuing
   await Promise.all([fetchTopAnime()]);
   loadingImg.style.display = "none";
+  searchByFavoriteList();
 });
