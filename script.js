@@ -198,6 +198,7 @@ function addToFavoriteList(animeName) {
 }
 
 function searchByFavoriteList() {
+  animeSearchContent.innerHTML = "";
   const baseUrl = `https://api.jikan.moe/v4/anime`;
   favoriteList.addEventListener("change", function (e) {
     // console.log(e.target.value);
