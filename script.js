@@ -212,6 +212,9 @@ function searchByFavoriteList() {
           animeSearchContent.append(card);
         });
       });
+    animeSearchContent.scrollIntoView({
+      behavior: "smooth",
+    });
   });
 
   // async function fetchAnime(url) {
